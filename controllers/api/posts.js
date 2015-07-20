@@ -1,23 +1,27 @@
 /**
  * Created by zen on 15. 7. 8.
  */
-var Post = require('../../models/post');
+
 var router = require('express').Router();
+var websockets = require('../../websockets');
+var Post = require('../../models/post');
 
 router.get('/', function(req, res, next){
-    Post.find().sort('-date').exec(function(err, posts){
+    Post.find()
+    .sort('-date')
+    .exec(function(err, posts){
         if(err){ return next(err); }
         res.json(posts);
     });
 });
 
 router.post('/', function(req,res,next){
-    var post = new Post({
-        username: req.body.username,
-        body: req.body.body
-    });
+    var post = new Post({ body: req.body.body });
+
+    post.username = req.auth.username;
     post.save(function(err,post){
         if(err) { return next(err); }
+        websockets.broadcast('new_post', post);
         res.status(201).json(post);
     });
 });

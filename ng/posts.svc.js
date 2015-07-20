@@ -3,10 +3,12 @@
  */
 angular.module('app')
 .service('PostsSvc', function($http){
-    console.log('error!');
 
     this.fetch = function() {
-        return $http.get('/api/posts');
+        return $http.get('/api/posts')
+            .then(function(response){
+                return response.data;
+            });
     };
 
     this.create = function(post) {
