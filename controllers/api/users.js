@@ -13,9 +13,7 @@ router.get('/', function(req, res, next) {
         console.log("users.js get function !req.header");
         return res.sendStatus(401);
     }
-    console.log("decode: %s", req.headers['x-auth']);
     var auth = jwt.decode(req.headers['x-auth'], config.secret);
-    console.log("users.js: %s", auth.username);
     User.findOne({username: auth.username}, function(err, user) {
         if(err) { return next(err); }
         res.json(user);
@@ -24,8 +22,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-    console.log("users.js post start");
-
     var user = new User({username: req.body.username});
     bcrypt.hash(req.body.password, 10, function(err, hash){
         if(err) { return next(err); }
@@ -35,7 +31,6 @@ router.post('/', function(req, res, next) {
             res.sendStatus(201);
         });
     });
-    console.log("users.js post end");
 });
 
 module.exports = router;

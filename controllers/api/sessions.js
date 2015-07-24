@@ -9,8 +9,7 @@ var config  = require('../../config');
 var User    = require('../../models/user');
 
 router.post('/', function(req, res, next) {
-    var username = req.body.username;
-    console.log("sessions.js 1: %s", username);
+    var username = req.body.username;d
     User.findOne( {username: username})
         .select('password')
         .exec(function(err, user){
@@ -26,7 +25,6 @@ router.post('/', function(req, res, next) {
                     console.log("error: sessions.js compare not users");
                     return res.sendStatus(401);
                 }
-                console.log("sessions.js : username : %s", username);
                 var token = jwt.encode({username: username}, config.secret);
                 res.send(token);
             });

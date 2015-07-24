@@ -4,6 +4,7 @@
 
 var router = require('express').Router();
 var websockets = require('../../websockets');
+var pubsub = require('../../pubsub');
 var Post = require('../../models/post');
 
 router.get('/', function(req, res, next){
@@ -18,12 +19,20 @@ router.get('/', function(req, res, next){
 router.post('/', function(req,res,next){
     var post = new Post({ body: req.body.body });
 
+    if(typeof req.auth.username == "undefined") {
+        return res.sendStatus(401);
+    }
     post.username = req.auth.username;
     post.save(function(err,post){
         if(err) { return next(err); }
-        websockets.broadcast('new_post', post);
+        pubsub.publish('new_post', post);
         res.status(201).json(post);
     });
 });
+
+pubsub.subscribe('new_post', function(post){
+   websockets.broadcast('new_post', post);
+});
+
 
 module.exports = router;
