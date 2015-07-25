@@ -7,7 +7,7 @@ var websockets = require('../../websockets');
 var pubsub = require('../../pubsub');
 var Post = require('../../models/post');
 
-router.get('/', function(req, res, next){
+router.get('/posts', function(req, res, next){
     Post.find()
     .sort('-date')
     .exec(function(err, posts){
@@ -16,7 +16,7 @@ router.get('/', function(req, res, next){
     });
 });
 
-router.post('/', function(req,res,next){
+router.post('/posts', function(req,res,next){
     var post = new Post({ body: req.body.body });
 
     if(typeof req.auth.username == "undefined") {

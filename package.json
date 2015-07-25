@@ -19,13 +19,19 @@
     "jwt-simple": "^0.3.0",
     "lodash": "^3.10.0",
     "mongoose": "^4.0.6",
+    "morgan": "^1.6.1",
     "path": "^0.11.14",
     "redis": "^0.12.1",
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.10.0",
     "ws": "^0.7.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "mocha": "^2.2.5",
+    "protractor": "^2.1.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

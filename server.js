@@ -3,30 +3,26 @@
  */
 
 var express = require('express');
-var bodyParser = require('body-parser');
+
 var favicon = require('serve-favicon');
 var path = require('path');
-//var serveStatic = require('serve-static');
+var logger = require('morgan');
+var websockets = require('./websockets');
 
 var app = express();
-app.use(bodyParser.json());
 app.use(favicon(path.join(__dirname, '/favicon.ico')));
-//app.use('/bootstrap', serveStatic(__dirname + '/node_modules/bootstrap/dist/css/'));
-app.use('/bootstrap',       express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
+app.use(logger('dev'));
 
+app.use('/bootstrap',       express.static(__dirname + '/node_modules/bootstrap/dist/css/'));
 app.use('/angular',         express.static(__dirname + '/node_modules/angular/'));
 app.use('/angular-route',   express.static(__dirname + '/node_modules/angular-route/'));  // error
 
-app.use(require('./controllers/static'));
-app.use(require('./auth'));
-app.use('/api/posts',   require('./controllers/api/posts'));
-app.use('/api/sessions',require('./controllers/api/sessions'));
-app.use('/api/users',   require('./controllers/api/users'));
+app.use(require('./controllers'));
 
-var server = app.listen(3000, function() {
-    console.log('Server listening on', 3000);
-    console.log('localhost:3000');
-    console.log('get json: localhost:3000/api/posts');
+var port = process.env.PORT || 3000;
+var server = app.listen(port, function() {
+    console.log('Server', process.pid, 'listening on', port);
+    console.log('http://localhost:',port);
 });
 
-require('./websockets').connect(server);
+websockets.connect(server);

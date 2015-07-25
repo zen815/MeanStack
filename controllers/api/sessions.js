@@ -8,8 +8,8 @@ var jwt     = require('jwt-simple');
 var config  = require('../../config');
 var User    = require('../../models/user');
 
-router.post('/', function(req, res, next) {
-    var username = req.body.username;d
+router.post('/sessions', function(req, res, next) {
+    var username = req.body.username;
     User.findOne( {username: username})
         .select('password')
         .exec(function(err, user){
